@@ -20,6 +20,22 @@ struct Strategy {
     b: Plays,
 }
 
+fn choose_win(p: Plays) -> Plays {
+    match p {
+        Plays::Rock => Plays::Paper,
+        Plays::Scissors => Plays::Rock,
+        Plays::Paper => Plays::Scissors,
+    }
+}
+
+fn choose_loss(p: Plays) -> Plays {
+    match p {
+        Plays::Paper => Plays::Rock,
+        Plays::Scissors => Plays::Paper,
+        Plays::Rock => Plays::Scissors,
+    }
+}
+
 #[derive(Debug, Reformation, Copy, Clone)]
 enum Outcome {
     #[reformation(r"X")]
@@ -40,9 +56,7 @@ struct NewStrategy {
 fn play(s: &Strategy) -> Outcome {
     match s {
         Strategy { a, b } if a == b => Outcome::Draw,
-        Strategy { a: Plays::Scissors, b: Plays::Rock } => Outcome::Win,
-        Strategy { a: Plays::Paper, b: Plays::Scissors} => Outcome::Win,
-        Strategy { a: Plays::Rock, b: Plays::Paper } => Outcome::Win,
+        Strategy { a, b } if *a == choose_loss(*b) => Outcome::Win,
         _ => Outcome::Loss,
     }
 }
@@ -66,22 +80,6 @@ fn parse_input_part2(input: &str) -> Vec<NewStrategy> {
         .lines()
         .map(|s| NewStrategy::parse(s).expect("bad input"))
         .collect_vec()
-}
-
-fn choose_win(p: Plays) -> Plays {
-    match p {
-        Plays::Rock => Plays::Paper,
-        Plays::Scissors => Plays::Rock,
-        Plays::Paper => Plays::Scissors,
-    }
-}
-
-fn choose_loss(p: Plays) -> Plays {
-    match p {
-        Plays::Paper => Plays::Rock,
-        Plays::Scissors => Plays::Paper,
-        Plays::Rock => Plays::Scissors,
-    }
 }
 
 fn choose_input(s: &NewStrategy) -> Plays {
