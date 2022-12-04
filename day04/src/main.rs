@@ -3,7 +3,7 @@ use reformation::Reformation;
 
 const INPUT: &str = include_str!("../input.txt");
 
-#[derive(Reformation, Debug)]
+#[derive(Reformation)]
 #[reformation(r"{a}-{b},{c}-{d}")]
 struct Assignements {
     a: usize,
